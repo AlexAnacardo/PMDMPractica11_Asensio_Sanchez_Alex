@@ -2,7 +2,7 @@ package es.ies.claudiomoyano.dam2.pmdm.practica11_asensio_sanchez_alex;
 
 import java.time.LocalDate;
 
-public class Album {
+public class Album implements Comparable{
     private int idFotoAlbum;
     private String nombre;
     private String banda;
@@ -65,5 +65,12 @@ public class Album {
 
     public void setFechaLanzamiento(LocalDate fechaLanzamiento) {
         this.fechaLanzamiento = fechaLanzamiento;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Album album = (Album)o;
+
+        return this.nombre.compareTo(album.nombre);
     }
 }

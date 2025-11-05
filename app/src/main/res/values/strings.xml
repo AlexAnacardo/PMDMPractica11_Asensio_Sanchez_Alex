@@ -7,4 +7,10 @@
 
     <string name="editar">Editar</string>
     <string name="eliminar">Eliminar</string>
+
+    <string name="navInicio">Inicio</string>
+    <string name="navLista">Lista completa</string>
+    <string name="navFavoritos">Favoritos</string>
+    <string name="navAjustes">Ajustes</string>
+    <string name="navAbout">Acerca de la app</string>
 </resources>

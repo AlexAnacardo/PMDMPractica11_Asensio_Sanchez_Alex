@@ -11,21 +11,31 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements RecyclerAlbumesInterface {
 
     private final List<Album> listaAlbumes = new ArrayList<>();
+
+    private DrawerLayout drawerLayout;
+
+    private NavigationView navView;
 
     private int albumSeleccionado = -1;
     AdaptadorAlbum adaptadorAlbum = new AdaptadorAlbum(listaAlbumes, this);
@@ -39,7 +49,34 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        drawerLayout = findViewById(R.id.drawer_layout);
 
+        navView = findViewById(R.id.nav_view);
+
+        navView.setNavigationItemSelectedListener(item -> {
+            final int id = item.getItemId();
+            if(id == R.id.nav_inicio) {
+                Toast.makeText(this, "Seleccionado Inicio", Toast.LENGTH_SHORT).show();
+            }else if(id == R.id.lista_completa){
+                Toast.makeText(this, "Seleccionado Lista completa", Toast.LENGTH_SHORT).show();
+            }else if(id == R.id.nav_favoritos){
+                Toast.makeText(this, "Seleccionado Favoritos", Toast.LENGTH_SHORT).show();
+            }
+            else if(id == R.id.nav_ajustes){
+                Toast.makeText(this, "Seleccionado Ajustes", Toast.LENGTH_SHORT).show();
+            }
+            else if(id == R.id.nav_about){
+                Toast.makeText(this, "Seleccionado Acerca de", Toast.LENGTH_SHORT).show();
+            }
+            drawerLayout.closeDrawers();
+            return true;
+        });
+
+        // Configurar el botón hamburguesa
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
 
         listaAlbumes.add(new Album(R.drawable.number_of_the_beast, "The number of the beast", "Iron Maiden", 14, "EMI / Harvest", LocalDate.parse("1982-03-29")));
         listaAlbumes.add(new Album(R.drawable.powerslave, "Powerslave", "Iron Maiden", 2, "EMI / Capitol", LocalDate.parse("1984-09-03")));
@@ -96,15 +133,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
 
     @Override
     public void onItemLongClick(int posicion) {
-        /*final String nombreAlbum = listaAlbumes.get(posicion).getNombre();
-        listaAlbumes.remove(posicion);
-        adaptadorAlbum.notifyItemRemoved(posicion);
-
-        Toast.makeText(getApplicationContext(), nombreAlbum+" ha sido borrado", Toast.LENGTH_LONG).show();
-        */
 
         albumSeleccionado = posicion;
-
 
         // Abrimos el menú contextual manualmente
         openContextMenu(findViewById(R.id.rvAlbumes));
@@ -131,10 +161,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
             Toast.makeText(this, "añadir", Toast.LENGTH_SHORT).show();
             return true;
         }else if(id== R.id.opcion_ordenar) {
-            Toast.makeText(this, "Ordenar", Toast.LENGTH_SHORT).show();
+
+            Collections.sort(listaAlbumes);
+
+            adaptadorAlbum.notifyDataSetChanged();
+
             return true;
+
         }else{
-            Toast.makeText(this, "info", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Listado de albumes de heavy metal, autor de la app: Alex Asensio Sanchez", Toast.LENGTH_SHORT).show();
             return true;
         }
     }
@@ -158,7 +193,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
         if(id == R.id.context_editar) {
             Toast.makeText(this, "Opción Editar seleccionada", Toast.LENGTH_SHORT).show();
         }else if(id == R.id.context_eliminar) {
-            Toast.makeText(this, "Opción Eliminar seleccionada item "+listaAlbumes.get(posicion).getNombre(), Toast.LENGTH_SHORT).show();
+
+            final String nombreAlbum = listaAlbumes.get(posicion).getNombre();
+            listaAlbumes.remove(posicion);
+            adaptadorAlbum.notifyItemRemoved(posicion);
+
+            Toast.makeText(getApplicationContext(), nombreAlbum+" ha sido borrado", Toast.LENGTH_LONG).show();
+
 
         }
         return super.onContextItemSelected(item);
