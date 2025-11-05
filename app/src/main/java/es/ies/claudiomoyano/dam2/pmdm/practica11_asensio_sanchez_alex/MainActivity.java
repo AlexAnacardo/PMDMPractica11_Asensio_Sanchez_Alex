@@ -2,10 +2,17 @@ package es.ies.claudiomoyano.dam2.pmdm.practica11_asensio_sanchez_alex;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -19,6 +26,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements RecyclerAlbumesInterface {
 
     private final List<Album> listaAlbumes = new ArrayList<>();
+
+    private int albumSeleccionado = -1;
     AdaptadorAlbum adaptadorAlbum = new AdaptadorAlbum(listaAlbumes, this);
 
     @Override
@@ -27,11 +36,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
         EdgeToEdge.enable(this);
         setContentView(R.layout.albumes_layout);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.rvAlbumes), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
 
         listaAlbumes.add(new Album(R.drawable.number_of_the_beast, "The number of the beast", "Iron Maiden", 14, "EMI / Harvest", LocalDate.parse("1982-03-29")));
         listaAlbumes.add(new Album(R.drawable.powerslave, "Powerslave", "Iron Maiden", 2, "EMI / Capitol", LocalDate.parse("1984-09-03")));
@@ -60,15 +68,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
         listaAlbumes.add(new Album(R.drawable.metallica, "Metallica (The Black Album)", "Metallica", 17, "Elektra", LocalDate.parse("1991-08-12")));
         listaAlbumes.add(new Album(R.drawable.master_of_puppets, "Master of puppets", "Metallica", 8, "Elektra", LocalDate.parse("1986-03-03")));
 
-
-
-
         RecyclerView rvAlbumes = findViewById(R.id.rvAlbumes);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
         rvAlbumes.setLayoutManager(linearLayoutManager);
 
         rvAlbumes.setAdapter(adaptadorAlbum);
+        registerForContextMenu(rvAlbumes);
 
 
     }
@@ -90,11 +96,71 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
 
     @Override
     public void onItemLongClick(int posicion) {
-        final String nombreAlbum = listaAlbumes.get(posicion).getNombre();
+        /*final String nombreAlbum = listaAlbumes.get(posicion).getNombre();
         listaAlbumes.remove(posicion);
         adaptadorAlbum.notifyItemRemoved(posicion);
 
         Toast.makeText(getApplicationContext(), nombreAlbum+" ha sido borrado", Toast.LENGTH_LONG).show();
+        */
 
+        albumSeleccionado = posicion;
+
+
+        // Abrimos el menú contextual manualmente
+        openContextMenu(findViewById(R.id.rvAlbumes));
+
+    }
+
+
+    /*MENU OPCIONES*/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_opciones, menu);
+        return true;
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu){
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.opcion_aniadir) {
+            Toast.makeText(this, "añadir", Toast.LENGTH_SHORT).show();
+            return true;
+        }else if(id== R.id.opcion_ordenar) {
+            Toast.makeText(this, "Ordenar", Toast.LENGTH_SHORT).show();
+            return true;
+        }else{
+            Toast.makeText(this, "info", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+    }
+
+
+
+    /*MENU CONTEXTUAL*/
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_contextual, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final int id = item.getItemId();
+
+        int posicion = albumSeleccionado;
+
+        if(id == R.id.context_editar) {
+            Toast.makeText(this, "Opción Editar seleccionada", Toast.LENGTH_SHORT).show();
+        }else if(id == R.id.context_eliminar) {
+            Toast.makeText(this, "Opción Eliminar seleccionada item "+listaAlbumes.get(posicion).getNombre(), Toast.LENGTH_SHORT).show();
+
+        }
+        return super.onContextItemSelected(item);
     }
 }

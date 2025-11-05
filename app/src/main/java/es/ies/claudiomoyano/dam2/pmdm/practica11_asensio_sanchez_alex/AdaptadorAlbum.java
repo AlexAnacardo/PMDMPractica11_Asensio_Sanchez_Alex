@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-
+/*
 public class AdaptadorAlbum extends RecyclerView.Adapter<AdaptadorAlbum.AlbumViewHolder>{
     private List<Album> listaAlbumes;
     private final RecyclerAlbumesInterface recyclerAlbumesInterface;
@@ -76,6 +76,71 @@ public class AdaptadorAlbum extends RecyclerView.Adapter<AdaptadorAlbum.AlbumVie
                 }
 
                 return true;
+            });
+        }
+    }
+}
+*/
+
+public class AdaptadorAlbum extends RecyclerView.Adapter<AdaptadorAlbum.AlbumViewHolder> {
+    private List<Album> listaAlbumes;
+    private final RecyclerAlbumesInterface recyclerAlbumesInterface;
+    public AdaptadorAlbum(List<Album> listaAlbumes, RecyclerAlbumesInterface recyclerAlbumesInterface) {
+        this.listaAlbumes = listaAlbumes;
+        this.recyclerAlbumesInterface = recyclerAlbumesInterface;
+    }
+
+    @NonNull
+    @Override
+    public AlbumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater from = LayoutInflater.from(parent.getContext());
+        View inflate = from.inflate(R.layout.item_albumes, parent, false);
+        return new AlbumViewHolder(inflate);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
+        Album album = this.listaAlbumes.get(position);
+        holder.imagen.setImageDrawable(holder.imagen.getContext().getDrawable(album.getIdFotoAlbum()));
+        holder.nombreAlbum.setText(album.getNombre());
+        holder.nombreBanda.setText(album.getBanda());
+    }
+
+    @Override
+    public int getItemCount() {
+        return this.listaAlbumes.size();
+    }
+
+    public class AlbumViewHolder extends RecyclerView.ViewHolder {
+        public ImageView imagen;
+        public TextView nombreAlbum;
+        public TextView nombreBanda;
+
+        public AlbumViewHolder(@NonNull View itemView) {
+            super(itemView);
+            imagen = itemView.findViewById(R.id.imagenAlbum);
+            nombreAlbum = itemView.findViewById(R.id.nombreAlbum);
+            nombreBanda = itemView.findViewById(R.id.nombreBanda);
+
+            // Click normal
+            itemView.setOnClickListener(view -> {
+                if (recyclerAlbumesInterface != null) {
+                    int pos = getAbsoluteAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        recyclerAlbumesInterface.onItemClick(pos);
+                    }
+                }
+            });
+
+            // Long click - Menú contextual
+            itemView.setOnLongClickListener(view -> {
+                if (recyclerAlbumesInterface != null) {
+                    int pos = getAbsoluteAdapterPosition();
+                    if (pos != RecyclerView.NO_POSITION) {
+                        recyclerAlbumesInterface.onItemLongClick(pos);  // Aquí se pasará la posición
+                    }
+                }
+                return true;  // Indicamos que manejamos el evento
             });
         }
     }
