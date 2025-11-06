@@ -16,4 +16,10 @@
 
     <string name="aceptarEditar">Aceptar</string>
     <string name="cancelarEditar">Cancelar</string>
+
+    <string name="nombreAlbum">Album: </string>
+    <string name="nombreBanda">Banda: </string>
+    <string name="nombreDiscografica">Discogrçafica: </string>
+    <string name="copiasVendidas">Copias vendidas: </string>
+    <string name="fechaLanzamiento">Fecha de lanzamiento: </string>
 </resources>
