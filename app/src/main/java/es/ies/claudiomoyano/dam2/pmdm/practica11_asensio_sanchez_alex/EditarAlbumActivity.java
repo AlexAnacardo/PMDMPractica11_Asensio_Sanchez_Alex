@@ -64,8 +64,6 @@ public class EditarAlbumActivity extends AppCompatActivity {
                     intent.putExtra("nuevoDiscografica", tiDiscografica.getText().toString());
                     intent.putExtra("nuevoCopias", Integer.parseInt(tiCopias.getText().toString()));
 
-                    //intent.putExtra("nuevoFecha", tiLanzamiento.getText().toString());
-
                     intent.putExtra("nuevoFecha", LocalDate.parse(tiLanzamiento.getText().toString()));
 
                     setResult(RESULT_OK, intent);

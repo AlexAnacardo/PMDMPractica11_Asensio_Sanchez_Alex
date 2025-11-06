@@ -57,8 +57,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
 
         drawerLayout = findViewById(R.id.drawer_layout);
 
+        //Recojo el contenido del menu desplegable
         navView = findViewById(R.id.nav_view);
-
+        //Le asigno al menu desplegable los eventos correspondientes a sus items
         navView.setNavigationItemSelectedListener(item -> {
             final int id = item.getItemId();
             if(id == R.id.nav_inicio) {
@@ -74,17 +75,20 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
             else if(id == R.id.nav_about){
                 Toast.makeText(this, "Seleccionado Acerca de", Toast.LENGTH_SHORT).show();
             }
+            //Al realizarse la accion, cierro el menu desplegable
             drawerLayout.closeDrawers();
             return true;
         });
 
-        // Configurar el botón hamburguesa
+        // Configurar el botón hamburguesa para desplegar el menu drawer
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        //Este bloque se usa para manejar el envio de informacion del intent asociado a editar
+
+
+        //Este bloque se usa para manejar el envio de informacion del intent asociado a editar album
         intentResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -103,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
                                 albumEditado.setBanda(valoresEditados.getStringExtra("nuevoBanda"));
                                 albumEditado.setDiscografica(valoresEditados.getStringExtra("nuevoDiscografica"));
                                 albumEditado.setCopiasVendidas(valoresEditados.getIntExtra("nuevoCopias", 0));
-                                //albumEditado.setFechaLanzamiento(LocalDate.parse(valoresEditados.getStringExtra("nuevoFecha")));
 
                                 albumEditado.setFechaLanzamiento(valoresEditados.getSerializableExtra("nuevoFecha", LocalDate.class));
 
@@ -115,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
                 }
         );
 
+
+        //Añado los albumes
         listaAlbumes.add(new Album(R.drawable.number_of_the_beast, "The number of the beast", "Iron Maiden", 14, "EMI / Harvest", LocalDate.parse("1982-03-29")));
         listaAlbumes.add(new Album(R.drawable.powerslave, "Powerslave", "Iron Maiden", 2, "EMI / Capitol", LocalDate.parse("1984-09-03")));
         listaAlbumes.add(new Album(R.drawable.seventh_son_of_a_seventh_son, "Seventh son of a seventh son", "Iron Maiden", 1, "EMI / Epic", LocalDate.parse("1988-04-11")));
@@ -187,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
     }
 
     public boolean onPrepareOptionsMenu(Menu menu){
-
         return true;
     }
 
