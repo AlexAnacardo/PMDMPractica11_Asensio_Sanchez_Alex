@@ -22,6 +22,8 @@
         </activity>
 
         <activity android:name=".DetalleAlbumActivity"/>
+
+        <activity android:name=".EditarAlbumActivity"/>
     </application>
 
 </manifest>

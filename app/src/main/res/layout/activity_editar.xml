@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditarAlbumActivity">
+
+    <ImageView
+        android:id="@+id/fotoAlbumEditar"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvNombreEditar"
+        tools:srcCompat="@tools:sample/avatars"
+        />
+
+    <TextView
+        android:id="@+id/tvNombreEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/fotoAlbumEditar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tiNombre"
+        app:layout_constraintBottom_toTopOf="@id/tvBandaEditar"/>
+
+    <EditText
+        android:id="@+id/tiNombre"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/fotoAlbumEditar"
+        app:layout_constraintStart_toEndOf="@id/tvNombreEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvBandaEditar"/>
+
+    <TextView
+        android:id="@+id/tvBandaEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintTop_toTopOf="@id/tiBanda"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tiBanda"
+        app:layout_constraintBottom_toBottomOf="@id/tiBanda"/>
+
+    <EditText
+        android:id="@+id/tiBanda"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvNombreEditar"
+        app:layout_constraintStart_toEndOf="@id/tvBandaEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvCopiasEditar"/>
+
+    <TextView
+        android:id="@+id/tvCopiasEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/tvBandaEditar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tiCopias"
+        app:layout_constraintBottom_toTopOf="@id/tvDiscograficaEditar"/>
+
+    <EditText
+        android:id="@+id/tiCopias"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvBandaEditar"
+        app:layout_constraintStart_toEndOf="@id/tvCopiasEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvDiscograficaEditar"/>
+
+    <TextView
+        android:id="@+id/tvDiscograficaEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/tvCopiasEditar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tiDiscografica"
+        app:layout_constraintBottom_toTopOf="@id/tvFechalanzamientoEditar"/>
+
+    <EditText
+        android:id="@+id/tiDiscografica"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvCopiasEditar"
+        app:layout_constraintStart_toEndOf="@id/tvDiscograficaEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tvFechalanzamientoEditar"/>
+
+    <TextView
+        android:id="@+id/tvFechalanzamientoEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintTop_toBottomOf="@id/tvDiscograficaEditar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/editTextDate"
+        app:layout_constraintBottom_toTopOf="@id/buttonAceptarEditar"/>
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="date"
+        app:layout_constraintTop_toBottomOf="@id/tvDiscograficaEditar"
+        app:layout_constraintStart_toEndOf="@id/tvFechalanzamientoEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonAceptarEditar"/>
+
+    <Button
+        android:id="@+id/buttonAceptarEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/aceptarEditar"
+        app:layout_constraintTop_toBottomOf="@id/editTextDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonCancelarEditar"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/buttonCancelarEditar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cancelarEditar"
+        app:layout_constraintTop_toBottomOf="@id/editTextDate"
+        app:layout_constraintStart_toEndOf="@id/buttonAceptarEditar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

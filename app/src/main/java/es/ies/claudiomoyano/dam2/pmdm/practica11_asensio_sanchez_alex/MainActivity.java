@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
 
     private int albumSeleccionado = -1;
     AdaptadorAlbum adaptadorAlbum = new AdaptadorAlbum(listaAlbumes, this);
+
+    ActivityResultLauncher<Intent> intentResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +83,37 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
                 this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
+        //Este bloque se usa para manejar el envio de informacion del intent asociado a editar
+        intentResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult o) {
+                        if(o.getResultCode() == RESULT_OK){
+                            if(o.getData() != null && o.getData().getExtras() != null){
+
+                                Intent valoresEditados = o.getData();
+
+                                int posicion = valoresEditados.getIntExtra("posicion", 0);
+
+                                Album albumEditado = listaAlbumes.get(posicion);
+
+                                albumEditado.setNombre(valoresEditados.getStringExtra("nuevoAlbum"));
+                                albumEditado.setBanda(valoresEditados.getStringExtra("nuevoBanda"));
+                                albumEditado.setDiscografica(valoresEditados.getStringExtra("nuevoDiscografica"));
+                                albumEditado.setCopiasVendidas(valoresEditados.getIntExtra("nuevoCopias", 0));
+                                //albumEditado.setFechaLanzamiento(LocalDate.parse(valoresEditados.getStringExtra("nuevoFecha")));
+
+                                albumEditado.setFechaLanzamiento(valoresEditados.getSerializableExtra("nuevoFecha", LocalDate.class));
+
+
+                                adaptadorAlbum.notifyItemChanged(posicion);
+                            }
+                        }
+                    }
+                }
+        );
 
         listaAlbumes.add(new Album(R.drawable.number_of_the_beast, "The number of the beast", "Iron Maiden", 14, "EMI / Harvest", LocalDate.parse("1982-03-29")));
         listaAlbumes.add(new Album(R.drawable.powerslave, "Powerslave", "Iron Maiden", 2, "EMI / Capitol", LocalDate.parse("1984-09-03")));
@@ -158,7 +195,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.opcion_aniadir) {
-            Toast.makeText(this, "añadir", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Album añadido", Toast.LENGTH_SHORT).show();
+
+            listaAlbumes.add(new Album(R.drawable.ic_launcher_background, "Album añadido", "Banda añadida", 1, "Discografica añadida", LocalDate.parse("2004-07-19")));
+            adaptadorAlbum.notifyDataSetChanged();
+
             return true;
         }else if(id== R.id.opcion_ordenar) {
 
@@ -191,7 +232,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
         int posicion = albumSeleccionado;
 
         if(id == R.id.context_editar) {
-            Toast.makeText(this, "Opción Editar seleccionada", Toast.LENGTH_SHORT).show();
+            Intent intentEditar = new Intent(this, EditarAlbumActivity.class);
+            Album album = listaAlbumes.get(posicion);
+
+            intentEditar.putExtra("posicion", posicion);
+            intentEditar.putExtra("foto", album.getIdFotoAlbum());
+            intentEditar.putExtra("nombre", album.getNombre());
+            intentEditar.putExtra("banda", album.getBanda());
+            intentEditar.putExtra("copias", album.getCopiasVendidas());
+            intentEditar.putExtra("discografica", album.getDiscografica());
+            intentEditar.putExtra("fechaLanzamiento", album.getFechaLanzamiento().toString());
+
+            intentResult.launch(intentEditar);
+
         }else if(id == R.id.context_eliminar) {
 
             final String nombreAlbum = listaAlbumes.get(posicion).getNombre();
@@ -199,9 +252,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerAlbumesIn
             adaptadorAlbum.notifyItemRemoved(posicion);
 
             Toast.makeText(getApplicationContext(), nombreAlbum+" ha sido borrado", Toast.LENGTH_LONG).show();
-
-
         }
         return super.onContextItemSelected(item);
     }
+
+
 }

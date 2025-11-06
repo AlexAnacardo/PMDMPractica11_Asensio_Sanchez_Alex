@@ -13,4 +13,7 @@
     <string name="navFavoritos">Favoritos</string>
     <string name="navAjustes">Ajustes</string>
     <string name="navAbout">Acerca de la app</string>
+
+    <string name="aceptarEditar">Aceptar</string>
+    <string name="cancelarEditar">Cancelar</string>
 </resources>
